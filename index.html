@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:">
+  <title>Control de Vencimientos</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <div class="eyebrow">SISTEMA DE INVENTARIO</div>
+    <h1>Control de Vencimientos</h1>
+    <p>Supervisa fechas y detecta productos que requieren atención. <span id="hoy" class="muted"></span></p>
+  </div>
+  <div class="top-actions">
+    <button class="btn ghost" id="btnTema" type="button" aria-label="Cambiar tema">🌓</button>
+    <button class="btn primary" id="btnNuevo" type="button">＋ Registrar producto</button>
+  </div>
+</header>
+
+<main class="container">
+  <section class="cards" id="stats" aria-label="Resumen"></section>
+
+  <section class="attention" id="atencion" aria-live="polite">
+    <div class="attention-title">
+      <div><h2>⚠️ Atención</h2><p>Productos vencidos o con vencimiento dentro de los próximos 15 días.</p></div>
+      <span class="attention-count" id="atencionN">0</span>
+    </div>
+    <div class="alert-grid" id="alertas"></div>
+  </section>
+
+  <section class="panel">
+    <div class="toolbar">
+      <div><h2>Productos</h2><p>Los días y estados se calculan automáticamente.</p></div>
+      <input id="buscar" type="search" maxlength="60" placeholder="🔎 Buscar por código o producto..." autocomplete="off">
+    </div>
+    <div class="filters" id="filtros"></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr>
+          <th data-sort="code">Código</th><th data-sort="name">Producto</th><th data-sort="qty">Cantidad</th>
+          <th data-sort="date">Vencimiento</th><th data-sort="date">Días restantes</th><th>Estado</th><th>Acciones</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty" id="vacio" hidden>No se encontraron productos con ese criterio.</div>
+    </div>
+    <div class="tools">
+      <button class="btn ghost" id="btnCsv" type="button">⬇ Exportar CSV</button>
+      <button class="btn ghost" id="btnJson" type="button">💾 Respaldo JSON</button>
+      <button class="btn ghost" id="btnImp" type="button">⬆ Importar JSON</button>
+      <button class="btn ghost danger-text" id="btnReset" type="button">↺ Restablecer datos de ejemplo</button>
+      <input type="file" id="fileImp" accept="application/json,.json" hidden>
+    </div>
+  </section>
+</main>
+
+<dialog id="dlgForm">
+  <form id="form" novalidate>
+    <h2 id="formTitulo">Registrar producto</h2>
+    <label>Código <input name="code" maxlength="30" required></label>
+    <label>Producto <input name="name" maxlength="60" required></label>
+    <label>Descripción <input name="desc" maxlength="150"></label>
+    <div class="row">
+      <label>Cantidad <input name="qty" type="number" min="0" max="999999" step="1" required></label>
+      <label>Fecha de vencimiento <input name="date" type="date" required></label>
+    </div>
+    <p class="error" id="formError" role="alert"></p>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" data-close>Cancelar</button>
+      <button type="submit" class="btn primary">Guardar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlgDel">
+  <h2>Eliminar producto</h2>
+  <p id="delTexto"></p>
+  <div class="dlg-actions">
+    <button type="button" class="btn ghost" data-close>Cancelar</button>
+    <button type="button" class="btn danger" id="btnConfirmDel">Eliminar</button>
+  </div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="js/seed.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
